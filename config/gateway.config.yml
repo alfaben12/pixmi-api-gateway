@@ -1,0 +1,66 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  hostname: localhost
+apiEndpoints:
+  forumAPI:
+    host: localhost
+    paths:
+      - '/discussions/*'
+      - '/healthz'
+  driversPIX:
+    host: localhost
+    paths:
+      - '/logins'
+      - '/registers/*'
+  membersAPI:
+    host: localhost
+serviceEndpoints:
+  forumService:
+    url: 'http://localhost:1337'
+  membersService:
+    url: 'http://localhost:1338'
+  serviceDriversPIX:
+    url: 'http://localhost:3002'
+policies:
+  - expression
+  - key-auth
+  - proxy
+pipelines:
+  - name: forum
+    apiEndpoints:
+      - forumAPI
+    policies:
+      - expression:
+        - action:
+            jscode: |
+              if (req.url.startsWith('/discussions')) {
+                const slug = req.url.substr('/discussions'.length);
+                req.url = '/d' + slug;
+              }
+      - proxy:
+        - action:
+            serviceEndpoint: forumService
+  - name: drivers
+    apiEndpoints:
+      - driversPIX
+    policies:
+      - expression:
+        - action:
+            jscode: |
+              if (req.url.startsWith('/registers')) {
+                const slug = req.url.substr('/registers'.length);
+                req.url = '/registers' + slug;
+              }
+      - proxy:
+        - action:
+            serviceEndpoint: serviceDriversPIX
+  - name: members
+    apiEndpoints:
+      - membersAPI
+    policies:
+      - key-auth:
+      - proxy:
+        - action:
+            serviceEndpoint: membersService
