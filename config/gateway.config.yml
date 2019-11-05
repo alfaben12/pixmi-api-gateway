@@ -12,8 +12,17 @@ apiEndpoints:
   driversPIX:
     host: localhost
     paths:
-      - '/logins'
-      - '/registers/*'
+      - '/v1/logins/*'
+      - '/v1/registers/*'
+      - '/v1/vouchers/*'
+      - '/v1/transportationtypes/*'
+      - '/v1/accounts/*'
+      - '/v1/payments/*'
+      - '/v1/shelters/*'
+      - '/v1/driverlevels/*'
+      - '/v1/driversetups/*'
+      - '/v1/admins/*'
+      - '/v1/adminroles/*'
   membersAPI:
     host: localhost
 serviceEndpoints:
@@ -49,9 +58,49 @@ pipelines:
       - expression:
         - action:
             jscode: |
-              if (req.url.startsWith('/registers')) {
-                const slug = req.url.substr('/registers'.length);
+              if (req.url.startsWith('/v1/logins')) {
+                const slug = req.url.substr('/v1/logins'.length);
+                req.url = '/logins' + slug;
+              }
+              if (req.url.startsWith('/v1/registers')) {
+                const slug = req.url.substr('/v1/registers'.length);
                 req.url = '/registers' + slug;
+              }
+              if (req.url.startsWith('/v1/vouchers')) {
+                const slug = req.url.substr('/v1/vouchers'.length);
+                req.url = '/vouchers' + slug;
+              }
+              if (req.url.startsWith('/v1/transportationtypes')) {
+                const slug = req.url.substr('/v1/transportationtypes'.length);
+                req.url = '/transportationtypes' + slug;
+              }
+              if (req.url.startsWith('/v1/accounts')) {
+                const slug = req.url.substr('/v1/accounts'.length);
+                req.url = '/accounts' + slug;
+              }
+              if (req.url.startsWith('/v1/payments')) {
+                const slug = req.url.substr('/v1/payments'.length);
+                req.url = '/payments' + slug;
+              }
+              if (req.url.startsWith('/v1/shelters')) {
+                const slug = req.url.substr('/v1/shelters'.length);
+                req.url = '/shelters' + slug;
+              }
+              if (req.url.startsWith('/v1/driverlevels')) {
+                const slug = req.url.substr('/v1/driverlevels'.length);
+                req.url = '/driverlevels' + slug;
+              }
+              if (req.url.startsWith('/v1/driversetups')) {
+                const slug = req.url.substr('/v1/driversetups'.length);
+                req.url = '/driversetups' + slug;
+              }
+              if (req.url.startsWith('/v1/admins')) {
+                const slug = req.url.substr('/v1/admins'.length);
+                req.url = '/admins' + slug;
+              }
+              if (req.url.startsWith('/v1/adminroles')) {
+                const slug = req.url.substr('/v1/adminroles'.length);
+                req.url = '/adminroles' + slug;
               }
       - proxy:
         - action:
