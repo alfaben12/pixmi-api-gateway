@@ -12,6 +12,7 @@ apiEndpoints:
   driversPIX:
     host: localhost
     paths:
+      - '/v1'
       - '/v1/logins/*'
       - '/v1/registers/*'
       - '/v1/vouchers/*'
@@ -23,6 +24,7 @@ apiEndpoints:
       - '/v1/driversetups/*'
       - '/v1/admins/*'
       - '/v1/adminroles/*'
+    methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
   membersAPI:
     host: localhost
 serviceEndpoints:
@@ -101,6 +103,9 @@ pipelines:
               if (req.url.startsWith('/v1/adminroles')) {
                 const slug = req.url.substr('/v1/adminroles'.length);
                 req.url = '/adminroles' + slug;
+              }
+              if (req.url.startsWith('/v1/')) {
+                req.url = '/';
               }
       - proxy:
         - action:
